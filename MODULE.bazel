@@ -1,0 +1,7 @@
+module(name = "openbsd", version = "0.1")
+
+bazel_dep(name = "shflags", version = "1.3.0")
+local_path_override(
+  module_name = "shflags",
+  path = "/home/xw/projects/shflags",
+)
