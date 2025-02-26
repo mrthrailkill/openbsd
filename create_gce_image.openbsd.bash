@@ -30,8 +30,8 @@ source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null || \
 
 source "$(rlocation shflags/shflags)"
 
-DEFINE_integer "version" "67" "OpenBSD version w/o decimal" "v"
-DEFINE_float "longversion" "6.7" "OpenBSD version w/ decimal" "l"
+DEFINE_integer "version" "76" "OpenBSD version w/o decimal" "v"
+DEFINE_float "longversion" "7.6" "OpenBSD version w/ decimal" "l"
 DEFINE_string "disk" "/tmp/disk.raw" "TODO: add description" "d"
 DEFINE_string "authorized_keys" "root/.ssh/authorized_keys" "TODO: add description" "a"
 
@@ -105,10 +105,10 @@ expect "DNS domain name\?"
 send "\n"
 
 expect "IPv4 address for vio0\?"
-send "dhcp\n"
+send "autoconf\n"
 
 expect "IPv6 address for vio0\?"
-send "\n"
+send "autoconf\n"
 
 expect "IPv6 prefix length for vio0\?"
 send "\n"
@@ -148,6 +148,9 @@ send "Australia/Sydney\n"
 
 expect "Which disk is the root disk\?"
 send "sd0\n"
+
+expect "Encrypt the root disk with a (p)assphrase or (k)eydisk\?"
+send "no\n"
 
 expect "Use \(W\)hole disk MBR, whole disk \(G\)PT or \(E\)dit\?"
 send "W\n"
