@@ -45,6 +45,11 @@ if ! [ -e ${FLAGS_authorized_keys} ]; then
   exit 1
 fi
 
+if ! which expect > /dev/null; then
+  echo "Please install 'expect'"
+  exit 1
+fi
+
 # Download kernel, sets, etc. from ftp.usa.openbsd.org
 if ! [ -e install${FLAGS_version}.iso ]; then
   if ! [curl -O ftp://ftp.usa.openbsd.org/pub/OpenBSD/snapshots/amd64/install${FLAGS_version}.iso ]; then
