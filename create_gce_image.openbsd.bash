@@ -52,7 +52,7 @@ fi
 
 # Download kernel, sets, etc. from ftp.usa.openbsd.org
 if ! [ -e install${FLAGS_version}.iso ]; then
-  if ! curl -O ftp://ftp.usa.openbsd.org/pub/OpenBSD/snapshots/amd64/install${FLAGS_version}.iso; then
+  if ! curl -O https://cdn.openbsd.org/pub/OpenBSD/${FLAGS_longversion}/amd64/install${FLAGS_version}.iso; then
     echo "Problem downloading ISO. Does it exist?"
     exit 1
   fi
