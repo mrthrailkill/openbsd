@@ -3,8 +3,18 @@ sh_binary(
   srcs = [
     "create_gce_image.openbsd.bash",
   ],
+  data = [
+    ":defaults",
+  ],
   deps = [
     "@bazel_tools//tools/bash/runfiles",
     "@shflags//:libshflags",
   ],
+)
+
+filegroup(
+  name = "defaults",
+  srcs = glob([
+    "default/*",
+  ]),
 )

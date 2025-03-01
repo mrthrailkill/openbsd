@@ -33,11 +33,14 @@ source "$(rlocation shflags/shflags)"
 DEFINE_integer "version" "76" "OpenBSD version w/o decimal" "v"
 DEFINE_float "longversion" "7.6" "OpenBSD version w/ decimal" "l"
 DEFINE_string "disk" "/tmp/disk.raw" "TODO: add description" "d"
-DEFINE_string "authorized_keys" "root/.ssh/authorized_keys" "TODO: add description" "a"
+DEFINE_string "authorized_keys" "default/authorized_keys" "authorized_keys for root user in image" "a"
+DEFINE_string "sshd_config" "default/sshd_config" "sshd_config for image"
 
 main () {
 readonly root_password=$(openssl rand 20 | hexdump -e '20/1 "%02x"')
 readonly tar_file="openbsd${FLAGS_version}-amd64-gce.tar.gz"
+readonly authorized_keys_path="root/.ssh/authorized_keys"
+readonly sshd_config_path="etc/ssh/sshd_config"
 
 # User of this script MUST provide a ssh authorized_keys file
 if ! [ -e ${FLAGS_authorized_keys} ]; then
@@ -67,11 +70,15 @@ cat >install.site <<EOF
 #!/bin/sh
 env PKG_PATH=ftp://ftp.usa.openbsd.org/pub/OpenBSD/snapshots/packages/amd64 pkg_add -iv bash curl
 echo "ignore classless-static-routes;" >> /etc/dhclient.conf
-chown -R root:wheel /etc/rc.local /etc/ssh/sshd_config /root/.ssh
+chown -R root:wheel /etc/rc.local ${FLAGS_sshd_config} /root/.ssh
 chmod 640 /root/.ssh/authorized_keys
 EOF
 chmod +x install.site
-tar -zcvf site${FLAGS_version}.tgz install.site etc/ssh/sshd_config root/.ssh/authorized_keys
+# TODO: implement a less hacky way to construct the correct file hierarchy
+# inside the tarball
+mkdir -p root/.ssh && cp ${FLAGS_authorized_keys} ${authorized_keys_path}
+mkdir -p etc/ssh && cp ${FLAGS_sshd_config} ${sshd_config_path}
+tar -zcvf site${FLAGS_version}.tgz install.site ${sshd_config_path} ${authorized_keys_path}
 
 # Hack install CD a bit.
 echo 'set tty com0' > boot.conf
