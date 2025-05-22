@@ -1,0 +1,5 @@
+#!/bin/sh
+env PKG_PATH=ftp://ftp.usa.openbsd.org/pub/OpenBSD/snapshots/packages/amd64 pkg_add -iv bash curl
+echo "ignore classless-static-routes;" >> /etc/dhclient.conf
+chown -R root:wheel /etc/rc.local /etc/ssh/sshd_config /root/.ssh
+chmod 640 /root/.ssh/authorized_keys
